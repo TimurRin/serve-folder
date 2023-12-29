@@ -11,7 +11,7 @@ program
   .name(version.package)
   .version(VERSION)
   .requiredOption("-f, --folder <PATH>", "folder")
-  .option("-p, --port [VALUE]", "port", parseInt, 63050);
+  .option("-p, --port [VALUE]", "port", 63050);
 
 program.parse();
 
