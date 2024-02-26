@@ -16,6 +16,8 @@ Install SnapServe globally using npm:
 npm install -g snapserve
 ```
 
+To access global plugins (`snapserve-*`), use `export NODE_PATH=$(npm root -g)`. To make the `NODE_PATH` setting permanent for Node.js, you can add it to your user's profile configuration file. This file is typically `~/.bash_profile`, `~/.bashrc`, `~/.profile`, or `~/.zshrc`, depending on which shell you are using.
+
 ### Usage
 
 ```

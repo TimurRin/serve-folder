@@ -2,15 +2,18 @@ import basicAuth from "express-basic-auth";
 import fs from "fs";
 import path from "path";
 
-import { generatePassword } from "./utils.js";
+import { generatePassword, getAppDirectory } from "./utils.js";
 
 function loadUsersFromConfig() {
-  const dataPath = path.join(".", "data");
-  if (!fs.existsSync(dataPath)) {
+  const appDir = getAppDirectory();
+
+  // eslint-disable-next-line security/detect-non-literal-fs-filename
+  if (!fs.existsSync(appDir)) {
     // eslint-disable-next-line security/detect-non-literal-fs-filename
-    fs.mkdirSync(dataPath, { recursive: true });
+    fs.mkdirSync(appDir, { recursive: true });
   }
-  const configPath = path.join(dataPath, "users.json");
+  const configPath = path.join(appDir, "users.json");
+  // eslint-disable-next-line security/detect-non-literal-fs-filename
   if (!fs.existsSync(configPath)) {
     // eslint-disable-next-line security/detect-non-literal-fs-filename
     fs.writeFileSync(
@@ -20,6 +23,7 @@ function loadUsersFromConfig() {
     );
     console.log("Check data/users.json for a username-password pair")
   }
+  // eslint-disable-next-line security/detect-non-literal-fs-filename
   const configFile = fs.readFileSync(configPath);
   return JSON.parse(configFile);
 }

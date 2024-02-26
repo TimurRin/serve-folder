@@ -1,3 +1,6 @@
+import os from 'os';
+import path from 'path';
+
 export function generatePassword(length) {
     const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+';
     let password = '';
@@ -7,4 +10,9 @@ export function generatePassword(length) {
         password += charset[randomIndex];
     }
     return password;
+}
+
+export function getAppDirectory() {
+  const homeDir = os.homedir();
+  return path.join(homeDir, ".config", "cinnabar-forge", "snapserve");
 }

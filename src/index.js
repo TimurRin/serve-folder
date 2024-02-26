@@ -5,7 +5,6 @@ import fs from "fs";
 import path from "path";
 
 import { authMiddleware } from "./auth.js";
-import { Mode } from "./types.js";
 
 const version = JSON.parse(fs.readFileSync("version.json", "utf8"));
 
@@ -22,7 +21,7 @@ program
   .option(
     "-m, --mode <MODE>",
     "Specify the mode (default, gallery)",
-    "default"
+    "default",
   );
 
 program.parse();
@@ -30,22 +29,32 @@ program.parse();
 const options = program.opts();
 console.log(options);
 
-async function loadMode(modeName, folder) {
+async function loadMode(app, modeName, folder) {
   let modeModule;
+
   try {
-    // eslint-disable-next-line node/no-unsupported-features/es-syntax
-    modeModule = await import(`./modes/${modeName}.js`);
+    if (modeName.startsWith("npm-")) {
+      const packageName = modeName.substring(4);
+      const fullPackageName = `snapserve-${packageName}`;
+      // eslint-disable-next-line node/no-unsupported-features/es-syntax
+      modeModule = await import(
+        path.join(process.env.NODE_PATH, fullPackageName, "index.js")
+      );
+    } else {
+      // eslint-disable-next-line node/no-unsupported-features/es-syntax
+      modeModule = await import(`./modes/${modeName}.js`);
+    }
   } catch (error) {
-    throw new Error(`failed to load mode '${modeName}': ${error}`);
+    throw new Error(`Failed to load mode '${modeName}': ${error}`);
   }
 
-  if (!modeModule.default || !(modeModule.default.prototype instanceof Mode)) {
+  if (!modeModule.default) {
     throw new Error(
-      `invalid mode '${modeName}': mode does not extend Mode class.`
+      `Invalid mode '${modeName}': Doesn't have a default export`,
     );
   }
 
-  return new modeModule.default(folder);
+  return modeModule.default(app, folder);
 }
 
 const app = express();
@@ -63,19 +72,18 @@ if (!options.noAuth) {
     !fs.lstatSync(resolvedFolder).isDirectory()
   ) {
     throw new Error(
-      `the folder ${options.folder} does not exist or is not a directory.`
+      `the folder ${options.folder} does not exist or is not a directory.`,
     );
   }
 
-  const mode = await loadMode(options.mode, resolvedFolder);
-  mode.apply(app);
+  await loadMode(app, options.mode, resolvedFolder);
 
   app.listen(options.port, () => {
     console.log(
       `${version.package}@${VERSION}, '${options.folder}' web locations:\n${getNetworkAddressesList(
         "http",
-        options.port
-      ).join("\n")}`
+        options.port,
+      ).join("\n")}`,
     );
   });
 })();
