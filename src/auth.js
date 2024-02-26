@@ -2,8 +2,24 @@ import basicAuth from "express-basic-auth";
 import fs from "fs";
 import path from "path";
 
+import { generatePassword } from "./utils.js";
+
 function loadUsersFromConfig() {
-  const configPath = path.join(".", "data", "users.json");
+  const dataPath = path.join(".", "data");
+  if (!fs.existsSync(dataPath)) {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
+    fs.mkdirSync(dataPath, { recursive: true });
+  }
+  const configPath = path.join(dataPath, "users.json");
+  if (!fs.existsSync(configPath)) {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
+    fs.writeFileSync(
+      configPath,
+      JSON.stringify({ admin: generatePassword(12) }),
+      "utf8"
+    );
+    console.log("Check data/users.json for a username-password pair")
+  }
   const configFile = fs.readFileSync(configPath);
   return JSON.parse(configFile);
 }

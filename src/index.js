@@ -18,6 +18,7 @@ program
   .version(VERSION)
   .requiredOption("-f, --folder <PATH>", "Specify the folder to serve")
   .option("-p, --port [VALUE]", "Specify the port", 63050)
+  .option("-n, --noAuth", "Disable auth")
   .option(
     "-m, --mode <MODE>",
     "Specify the mode (default, gallery)",
@@ -27,6 +28,7 @@ program
 program.parse();
 
 const options = program.opts();
+console.log(options);
 
 async function loadMode(modeName, folder) {
   let modeModule;
@@ -48,7 +50,9 @@ async function loadMode(modeName, folder) {
 
 const app = express();
 
-app.use(authMiddleware());
+if (!options.noAuth) {
+  app.use(authMiddleware());
+}
 
 (async () => {
   const resolvedFolder = path.resolve(options.folder);
