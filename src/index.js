@@ -6,16 +6,20 @@ import path from "path";
 
 import { authMiddleware } from "./auth.js";
 
-const version = JSON.parse(fs.readFileSync("version.json", "utf8"));
+const scriptDirectory = path.dirname(new URL(import.meta.url).pathname);
+const version = JSON.parse(
+  // eslint-disable-next-line security/detect-non-literal-fs-filename
+  fs.readFileSync(path.resolve(scriptDirectory, "..", "version.json"), "utf8"),
+);
 
-const VERSION = `${version.major}.${version.minor}.${version.patch}`;
+version.text = `${version.major}.${version.minor}.${version.patch}`;
 
 const program = new Command();
 
 program
   .name(version.package)
-  .version(VERSION)
-  .requiredOption("-f, --folder <PATH>", "Specify the folder to serve")
+  .version(`v${version.text}`, "-v, --version")
+  .option("-f, --folder <PATH>", "Specify the folder to serve", process.cwd())
   .option("-p, --port [VALUE]", "Specify the port", 63050)
   .option("-n, --noAuth", "Disable auth")
   .option(
@@ -61,6 +65,10 @@ const app = express();
 
 if (!options.noAuth) {
   app.use(authMiddleware());
+} else {
+  console.log(
+    "\n[WARNING] Launching in no-auth mode, the folder is exposed to the Internet as is!!!",
+  );
 }
 
 (async () => {
@@ -80,7 +88,7 @@ if (!options.noAuth) {
 
   app.listen(options.port, () => {
     console.log(
-      `${version.package}@${VERSION}, '${options.folder}' web locations:\n${getNetworkAddressesList(
+      `\n${version.package}@${version.text} is serving '${options.folder}' at:\n${getNetworkAddressesList(
         "http",
         options.port,
       ).join("\n")}`,
