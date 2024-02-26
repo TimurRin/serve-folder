@@ -19,9 +19,9 @@ function loadUsersFromConfig() {
     fs.writeFileSync(
       configPath,
       JSON.stringify({ admin: generatePassword(12) }),
-      "utf8"
+      "utf8",
     );
-    console.log("Check data/users.json for a username-password pair")
+    console.log("Check data/users.json for a username-password pair");
   }
   // eslint-disable-next-line security/detect-non-literal-fs-filename
   const configFile = fs.readFileSync(configPath);
