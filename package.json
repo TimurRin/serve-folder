@@ -1,19 +1,45 @@
 {
-  "name": "serve-folder",
-  "private": true,
+  "name": "snapserve",
   "version": "0.1.1",
+  "description": "Web-serve your folders in a snap using various view modes",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cinnabar-forge/snapserve.git"
+  },
+  "license": "ISC",
   "author": {
     "name": "Timur Moziev",
-    "email": "timur@moziev.ru",
-    "url": "https://moziev.ru"
+    "email": "timur.moziev@gmail.com",
+    "url": "https://timurrin.github.io"
   },
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "snapserve": "bin/snapserve"
+  },
+  "files": [
+    "bin",
+    "src",
+    "version.json"
+  ],
   "scripts": {
-    "start": "node index.js"
+    "format": "npx prettier . --write",
+    "lint": "npx eslint --fix --ext .js,.json .",
+    "test": "mocha",
+    "verify": "npm run lint && npm run format && npm test"
   },
   "dependencies": {
-    "commander": "^11.1.0",
-    "express": "^4.18.2",
-    "serve-index": "^1.9.1"
+    "@cinnabar-forge/utils": "0.1.0",
+    "commander": "11.1.0",
+    "express": "4.18.2",
+    "express-basic-auth": "1.2.1",
+    "serve-index": "1.9.1"
   },
-  "type": "module"
+  "devDependencies": {
+    "@cinnabar-forge/eslint-plugin": "0.3.0",
+    "mocha": "10.3.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
 }
