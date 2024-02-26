@@ -24,14 +24,13 @@ program
   .option("-n, --noAuth", "Disable auth")
   .option(
     "-m, --mode <MODE>",
-    "Specify the mode (default, gallery)",
+    "Specify the mode (default, gallery, npm-wonka)",
     "default",
   );
 
 program.parse();
 
 const options = program.opts();
-console.log(options);
 
 async function loadMode(app, modeName, folder) {
   let modeModule;
@@ -88,7 +87,7 @@ if (!options.noAuth) {
 
   app.listen(options.port, () => {
     console.log(
-      `\n${version.package}@${version.text} is serving '${options.folder}' at:\n${getNetworkAddressesList(
+      `\n${version.package}@${version.text} is serving '${options.folder}' as '${options.mode}' at:\n${getNetworkAddressesList(
         "http",
         options.port,
       ).join("\n")}`,
