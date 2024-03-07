@@ -1,6 +1,6 @@
 {
   "name": "snapserve",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Web-serve your folders in a snap using various view modes",
   "repository": {
     "type": "git",
