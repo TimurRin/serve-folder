@@ -19,8 +19,7 @@
   },
   "files": [
     "bin",
-    "src",
-    "version.json"
+    "src"
   ],
   "scripts": {
     "format": "npx prettier . --write",

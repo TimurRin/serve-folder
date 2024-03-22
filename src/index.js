@@ -1,24 +1,19 @@
-import { getNetworkAddressesList } from "@cinnabar-forge/utils";
+import { getStartupWelcomeText } from "@cinnabar-forge/utils";
 import { Command } from "commander";
 import express from "express";
 import fs from "fs";
 import path from "path";
 
 import { authMiddleware } from "./auth.js";
+import cinnabarData from "./cinnabar.js";
 
-const scriptDirectory = path.dirname(new URL(import.meta.url).pathname);
-const version = JSON.parse(
-  // eslint-disable-next-line security/detect-non-literal-fs-filename
-  fs.readFileSync(path.resolve(scriptDirectory, "..", "version.json"), "utf8"),
-);
-
-version.text = `${version.major}.${version.minor}.${version.patch}`;
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
 const program = new Command();
 
 program
-  .name(version.package)
-  .version(`v${version.text}`, "-v, --version")
+  .name(cinnabarData.stack.nodejs.package)
+  .version(`v${cinnabarData.version.text}`, "-v, --version")
   .option("-f, --folder <PATH>", "Specify the folder to serve", process.cwd())
   .option("-p, --port [VALUE]", "Specify the port", 63050)
   .option("-n, --noAuth", "Disable auth")
@@ -87,10 +82,16 @@ if (!options.noAuth) {
 
   app.listen(options.port, () => {
     console.log(
-      `\n${version.package}@${version.text} is serving '${options.folder}' as '${options.mode}' at:\n${getNetworkAddressesList(
+      `\n===============================================\nServing '${options.folder}' in '${options.mode}' mode\n===============================================`,
+    );
+    console.log(
+      getStartupWelcomeText(
+        cinnabarData.stack.nodejs.package,
+        cinnabarData.version.text,
+        IS_PRODUCTION,
         "http",
         options.port,
-      ).join("\n")}`,
+      ),
     );
   });
 })();

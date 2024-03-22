@@ -1,0 +1,22 @@
+{
+  "cinnabarMetaVersion": 1,
+  "description": "Web-serve your folders in a snap using various view modes",
+  "name": "SnapServe",
+  "version": {
+    "major": 0,
+    "minor": 3,
+    "patch": 0,
+    "revision": 5,
+    "text": "0.3.0",
+    "timestamp": 1709815240
+  },
+  "stack": {
+    "nodejs": {
+      "outputFile": [
+        "src",
+        "cinnabar.js"
+      ],
+      "package": "snapserve"
+    }
+  }
+}
