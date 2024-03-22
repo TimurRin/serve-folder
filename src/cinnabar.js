@@ -7,10 +7,10 @@ export default {
   "version": {
     "major": 0,
     "minor": 3,
-    "patch": 0,
-    "revision": 5,
-    "text": "0.3.0",
-    "timestamp": 1709815240
+    "patch": 1,
+    "revision": 6,
+    "text": "0.3.1",
+    "timestamp": 1711107916
   },
   "stack": {
     "nodejs": {
