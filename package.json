@@ -15,7 +15,7 @@
   "type": "module",
   "main": "src/index.js",
   "bin": {
-    "snapserve": "bin/snapserve"
+    "snapserve": "bin/snapserve.js"
   },
   "files": [
     "bin",
