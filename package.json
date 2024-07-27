@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@cinnabar-forge/eslint-plugin": "0.3.0",
+    "@cinnabar-forge/meta": "^0.1.2",
     "mocha": "10.3.0"
   },
   "engines": {
