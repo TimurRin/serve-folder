@@ -5,10 +5,10 @@
   "version": {
     "major": 0,
     "minor": 3,
-    "patch": 1,
-    "revision": 6,
-    "text": "0.3.1",
-    "timestamp": 1711107916
+    "patch": 2,
+    "revision": 7,
+    "text": "0.3.2",
+    "timestamp": 1722116290
   },
   "stack": {
     "nodejs": {
